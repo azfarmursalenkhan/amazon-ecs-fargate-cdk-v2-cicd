@@ -6,7 +6,8 @@ pip install --upgrade pip && \
 pip install flask 
 
 RUN alias python=python3
-
+EXPOSE 22
+EXPOSE 8080
 ENV FLASK_APP app.py
 ENV PLATFORM 'Amazon ECS'
 
