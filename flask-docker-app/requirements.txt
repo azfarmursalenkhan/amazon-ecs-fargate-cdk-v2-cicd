@@ -1,6 +1,7 @@
 Click==5.0
-Flask==1.1.1
+Flask==0.9
 itsdangerous==1.1.0
 Jinja2==2.11.3
 MarkupSafe==1.1.1
 Werkzeug==0.15.6
+beginner==0.0.2
