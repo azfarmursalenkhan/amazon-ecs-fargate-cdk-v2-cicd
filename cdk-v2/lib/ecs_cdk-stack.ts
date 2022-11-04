@@ -59,6 +59,10 @@ export class EcsCdkStack extends cdk.Stack {
       assumedBy: new iam.ServicePrincipal('ecs-tasks.amazonaws.com')
     });
 
+    taskrole.addManagedPolicy({
+      managedPolicyArn: 'arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess',
+    });
+
 
 
     // ***ecs contructs***
@@ -83,6 +87,16 @@ export class EcsCdkStack extends cdk.Stack {
     taskDef.addToExecutionRolePolicy(executionRolePolicy);
 
     const baseImage = 'public.ecr.aws/amazonlinux/amazonlinux:2022'
+    const xray = taskDef.addContainer('xray', {
+      image: ecs.ContainerImage.fromRegistry('amazon/aws-xray-daemon'),
+      cpu: 32,
+      memoryReservationMiB: 256,
+      essential: false,
+    });
+    xray.addPortMappings({
+      containerPort: 2000,
+      protocol: ecs.Protocol.UDP,
+    });
     const container = taskDef.addContainer('flask-app', {
       image: ecs.ContainerImage.fromRegistry(baseImage),
       memoryLimitMiB: 256,
